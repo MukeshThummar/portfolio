@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mukesh Thummar - Portfolio</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #0f2847 0%, #1a4d7a 100%);
+    }
+
+    .hero-bg {
+      position: relative;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><pattern id="code" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse"><text x="10" y="20" font-family="monospace" font-size="12" fill="%23ffffff" opacity="0.1">const code = () =&gt; {</text><text x="20" y="40" font-family="monospace" font-size="12" fill="%23ffffff" opacity="0.1">  return true;</text><text x="10" y="60" font-family="monospace" font-size="12" fill="%23ffffff" opacity="0.1">};</text><text x="10" y="90" font-family="monospace" font-size="12" fill="%2306b6d4" opacity="0.15">&lt;div&gt;&lt;/div&gt;</text><text x="10" y="120" font-family="monospace" font-size="12" fill="%23ffffff" opacity="0.1">function dev() {</text><text x="10" y="150" font-family="monospace" font-size="12" fill="%2306b6d4" opacity="0.15">SELECT * FROM</text></pattern></defs><rect width="1200" height="600" fill="url(%23code)"/></svg>');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(15, 40, 71, 0.95) 0%, rgba(26, 77, 122, 0.92) 100%);
+      backdrop-filter: blur(2px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-picture {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #06b6d4;
+      box-shadow: 0 10px 40px rgba(6, 182, 212, 0.4);
+      background: #ffffff;
+    }
+
+    .skill-card {
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-4px);
+      border-left-color: #06b6d4;
+      box-shadow: 0 10px 25px rgba(6, 182, 212, 0.2);
+    }
+
+    .section-title {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 12px;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: #06b6d4;
+    }
+
+    .timeline-item {
+      border-left: 2px solid #06b6d4;
+      padding-left: 24px;
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: 0;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #06b6d4;
+      border: 3px solid #0f2847;
+    }
+
+    .btn-primary {
+      background: #06b6d4;
+      color: white;
+      padding: 12px 32px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      border: 2px solid #06b6d4;
+    }
+
+    .btn-primary:hover {
+      background: #0891b2;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      padding: 12px 32px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      border: 2px solid white;
+    }
+
+    .btn-secondary:hover {
+      background: white;
+      color: #0f2847;
+    }
+
+    .project-card {
+      transition: all 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full">
+  <div class="w-full h-full overflow-auto" style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;"><!-- Navigation -->
+   <nav class="gradient-bg text-white py-4 px-6 sticky top-0 z-50 shadow-lg">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+     <div class="text-xl font-bold" id="nav-name">
+      Mukesh Thummar
+     </div>
+     <div class="hidden md:flex gap-6"><a href="#about" class="hover:text-cyan-400 transition">About</a> <a href="#skills" class="hover:text-cyan-400 transition">Skills</a> <a href="#experience" class="hover:text-cyan-400 transition">Experience</a> <a href="#projects" class="hover:text-cyan-400 transition">Projects</a> <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+     </div>
+    </div>
+   </nav><!-- Hero Section -->
+   <section class="hero-bg text-white py-20 px-6">
+    <div class="max-w-6xl mx-auto hero-content">
+     <div class="flex flex-col md:flex-row items-center gap-12">
+      <div class="flex-1">
+       <div class="text-cyan-400 text-lg mb-2">
+        👋 Hello, I'm
+       </div>
+       <h1 class="text-5xl font-bold mb-4" id="hero-name">Mukesh N. Thummar</h1>
+       <h2 class="text-2xl text-gray-300 mb-4" id="hero-title">Tech Enthusiast</h2>
+       <p class="text-lg text-gray-300 mb-2" id="hero-location">📍 Surat, Gujarat, India</p>
+       <p class="text-xl text-gray-200 mb-8 leading-relaxed" id="hero-tagline">Results-driven software engineer with 15+ years of experience in enterprise application development, architecture, and team leadership.</p>
+       <div class="flex gap-4 flex-wrap"><a href="#contact" class="btn-primary">Contact Me</a> <a href="#experience" class="btn-secondary">View Experience</a>
+       </div>
+      </div>
+      <div>
+       <svg class="profile-picture" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 200 200"><defs>
+         <lineargradient id="profileBg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+         </lineargradient>
+        </defs> <circle cx="100" cy="100" r="100" fill="url(#profileBg)" /> <circle cx="100" cy="75" r="30" fill="#ffffff" /> <path d="M 100 110 Q 70 110 50 140 L 50 200 L 150 200 L 150 140 Q 130 110 100 110 Z" fill="#ffffff" /> <text x="100" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">
+         MUKESH
+        </text> <text x="100" y="185" text-anchor="middle" font-size="14" font-weight="bold" fill="#06b6d4">
+         TECH LEAD
+        </text>
+       </svg>
+      </div>
+     </div>
+    </div>
+   </section><!-- About Section -->
+   <section id="about" class="py-20 px-6 bg-white">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="text-4xl font-bold text-gray-800 mb-8 section-title">About Me</h2>
+     <p class="text-lg text-gray-700 leading-relaxed mb-6">I am a results-driven software engineer with over 15 years of experience in software development, enterprise application architecture, and project leadership. I specialize in Microsoft technologies and modern full-stack development, with strong expertise in scalable systems, DevOps practices, and agile methodologies.</p>
+     <p class="text-lg text-gray-700 leading-relaxed">I enjoy building reliable, high-performance solutions and mentoring teams to achieve excellence in software delivery.</p>
+    </div>
+   </section><!-- Skills Section -->
+   <section id="skills" class="py-20 px-6 bg-gray-50">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="text-4xl font-bold text-gray-800 mb-12 section-title">Technical Skills</h2>
+     <div class="grid md:grid-cols-2 gap-8"><!-- Languages & Frameworks -->
+      <div class="skill-card bg-white p-6 rounded-lg shadow-md">
+       <div class="flex items-center gap-3 mb-4">
+        <div class="text-3xl">
+         💻
+        </div>
+        <h3 class="text-xl font-bold text-gray-800">Languages &amp; Frameworks</h3>
+       </div>
+       <div class="flex flex-wrap gap-2"><span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">C#</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">.NET Core</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">ASP.NET</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">MVC</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">VB.NET</span> <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Node.js</span> <span class="bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full text-sm">React</span> <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">jQuery</span>
+       </div>
+      </div><!-- Databases -->
+      <div class="skill-card bg-white p-6 rounded-lg shadow-md">
+       <div class="flex items-center gap-3 mb-4">
+        <div class="text-3xl">
+         🗄️
+        </div>
+        <h3 class="text-xl font-bold text-gray-800">Databases</h3>
+       </div>
+       <div class="flex flex-wrap gap-2"><span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">SQL Server</span> <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">MySQL</span> <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">MongoDB</span> <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">MS Access</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Azure SQL</span>
+       </div>
+      </div><!-- Tools & Technologies -->
+      <div class="skill-card bg-white p-6 rounded-lg shadow-md">
+       <div class="flex items-center gap-3 mb-4">
+        <div class="text-3xl">
+         🛠️
+        </div>
+        <h3 class="text-xl font-bold text-gray-800">Tools &amp; Technologies</h3>
+       </div>
+       <div class="flex flex-wrap gap-2"><span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Redis</span> <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">LDAP</span> <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">ElasticSearch</span> <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">RabbitMQ</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">WCF</span> <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">Entity Framework</span>
+       </div>
+      </div><!-- DevOps & Tools -->
+      <div class="skill-card bg-white p-6 rounded-lg shadow-md">
+       <div class="flex items-center gap-3 mb-4">
+        <div class="text-3xl">
+         ⚙️
+        </div>
+        <h3 class="text-xl font-bold text-gray-800">DevOps &amp; Project Tools</h3>
+       </div>
+       <div class="flex flex-wrap gap-2"><span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Git</span> <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Jenkins</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Azure DevOps</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Jira</span> <span class="bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full text-sm">Trello</span> <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">Flyway</span>
+       </div>
+      </div><!-- Reporting Tools -->
+      <div class="skill-card bg-white p-6 rounded-lg shadow-md">
+       <div class="flex items-center gap-3 mb-4">
+        <div class="text-3xl">
+         📊
+        </div>
+        <h3 class="text-xl font-bold text-gray-800">Reporting &amp; BI Tools</h3>
+       </div>
+       <div class="flex flex-wrap gap-2"><span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">Crystal Reports</span> <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">SSRS</span> <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Power BI</span> <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Excel Integration</span>
+       </div>
+      </div><!-- Core Strengths -->
+      <div class="skill-card bg-white p-6 rounded-lg shadow-md">
+       <div class="flex items-center gap-3 mb-4">
+        <div class="text-3xl">
+         ⭐
+        </div>
+        <h3 class="text-xl font-bold text-gray-800">Core Strengths</h3>
+       </div>
+       <div class="flex flex-wrap gap-2"><span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Full Stack Development</span> <span class="bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full text-sm">Application Architecture</span> <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Agile &amp; Scrum</span> <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Team Leadership</span> <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Requirements Analysis</span> <span class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm">Client Communication</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Experience Section -->
+   <section id="experience" class="py-20 px-6 bg-white">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="text-4xl font-bold text-gray-800 mb-12 section-title">Professional Experience</h2>
+     <div class="space-y-8"><!-- Current Role -->
+      <div class="timeline-item">
+       <div class="flex flex-wrap items-center justify-between mb-2">
+        <h3 class="text-2xl font-bold text-gray-800">Associate Technical Lead</h3><span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">Current</span>
+       </div>
+       <div class="text-cyan-600 font-semibold mb-2">
+        Casepoint Pvt. Ltd.
+       </div>
+       <div class="text-gray-600 mb-3">
+        June 2024 – Present
+       </div>
+       <p class="text-gray-700 mb-3">Working on Cloud Data Collection modules for an eDiscovery product</p>
+       <div class="flex flex-wrap gap-2"><span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-sm">.NET Core</span> <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-sm">MVC</span> <span class="bg-red-50 text-red-700 px-2 py-1 rounded text-sm">Redis</span> <span class="bg-yellow-50 text-yellow-700 px-2 py-1 rounded text-sm">ElasticSearch</span> <span class="bg-orange-50 text-orange-700 px-2 py-1 rounded text-sm">RabbitMQ</span> <span class="bg-gray-50 text-gray-700 px-2 py-1 rounded text-sm">LDAP</span>
+       </div>
+      </div><!-- Previous Role 1 -->
+      <div class="timeline-item">
+       <h3 class="text-2xl font-bold text-gray-800 mb-2">Senior Software Engineer</h3>
+       <div class="text-cyan-600 font-semibold mb-2">
+        SRKAY Consulting Group Pvt. Ltd.
+       </div>
+       <div class="text-gray-600 mb-3">
+        July 2017 – June 2024 (7 years)
+       </div>
+       <p class="text-gray-700 mb-3">Lead development of customized ERP and e-commerce solutions for the diamond industry</p>
+       <div class="flex flex-wrap gap-2"><span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-sm">.NET Core</span> <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded text-sm">React</span> <span class="bg-green-50 text-green-700 px-2 py-1 rounded text-sm">MongoDB</span> <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-sm">Azure</span> <span class="bg-purple-50 text-purple-700 px-2 py-1 rounded text-sm">SQL Server</span>
+       </div>
+      </div><!-- Previous Role 2 -->
+      <div class="timeline-item">
+       <h3 class="text-2xl font-bold text-gray-800 mb-2">Senior Team Leader</h3>
+       <div class="text-cyan-600 font-semibold mb-2">
+        Netsol IT Solutions Pvt. Ltd.
+       </div>
+       <div class="text-gray-600 mb-3">
+        March 2010 – July 2017 (7+ years)
+       </div>
+       <p class="text-gray-700 mb-3">Delivered ERP, accounting, billing, and queue management systems. Managed requirements, system design, client communication, and team leadership.</p>
+       <div class="flex flex-wrap gap-2"><span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-sm">.NET</span> <span class="bg-purple-50 text-purple-700 px-2 py-1 rounded text-sm">SQL Server</span> <span class="bg-gray-50 text-gray-700 px-2 py-1 rounded text-sm">WCF</span> <span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded text-sm">Entity Framework</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Projects Section -->
+   <section id="projects" class="py-20 px-6 bg-gray-50">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="text-4xl font-bold text-gray-800 mb-12 section-title">Project Highlights</h2>
+     <div class="grid md:grid-cols-2 gap-8">
+      <div class="project-card bg-white p-6 rounded-lg shadow-md">
+       <div class="text-4xl mb-4">
+        ⚖️
+       </div>
+       <h3 class="text-xl font-bold text-gray-800 mb-3">eDiscovery Solution</h3>
+       <p class="text-gray-700">Cloud-based legal data ingestion platform with advanced search and processing capabilities</p>
+      </div>
+      <div class="project-card bg-white p-6 rounded-lg shadow-md">
+       <div class="text-4xl mb-4">
+        🏢
+       </div>
+       <h3 class="text-xl font-bold text-gray-800 mb-3">ERP Platform</h3>
+       <p class="text-gray-700">A modular ERP with accounting, inventory, and payroll management systems.</p>
+      </div>
+      <div class="project-card bg-white p-6 rounded-lg shadow-md">
+       <div class="text-4xl mb-4">
+        💎
+       </div>
+       <h3 class="text-xl font-bold text-gray-800 mb-3">Diamond E-Commerce Web Application</h3>
+       <p class="text-gray-700">E-commerce platform with GIA/HRD/IGI certificate integration and diamond verification API.</p>
+      </div>
+	  <div class="project-card bg-white p-6 rounded-lg shadow-md">
+       <div class="text-4xl mb-4">
+        💎
+       </div>
+       <h3 class="text-xl font-bold text-gray-800 mb-3">Customized ERP System</h3>
+       <p class="text-gray-700">Comprehensive accounting, inventory, payroll, and e-commerce integration for diamond industry</p>
+      </div>
+      <div class="project-card bg-white p-6 rounded-lg shadow-md">
+       <div class="text-4xl mb-4">
+        🎫
+       </div>
+       <h3 class="text-xl font-bold text-gray-800 mb-3">Queue Management System</h3>
+       <p class="text-gray-700">Service center automation solution with real-time tracking and customer flow management</p>
+      </div>
+      <div class="project-card bg-white p-6 rounded-lg shadow-md">
+       <div class="text-4xl mb-4">
+        📊
+       </div>
+       <h3 class="text-xl font-bold text-gray-800 mb-3">Accounting &amp; Billing Software</h3>
+       <p class="text-gray-700">Desktop ERP with comprehensive reporting and inventory management features</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- Education & Achievements -->
+   <section class="py-20 px-6 bg-white">
+    <div class="max-w-6xl mx-auto">
+     <div class="grid md:grid-cols-2 gap-12"><!-- Education -->
+      <div>
+       <h2 class="text-3xl font-bold text-gray-800 mb-8 section-title">Education</h2>
+       <div class="space-y-4">
+        <div class="border-l-4 border-cyan-400 pl-4">
+         <h3 class="font-bold text-gray-800">H.S.C</h3>
+         <p class="text-gray-600">Gujarat Higher Secondary Education Board</p>
+         <p class="text-sm text-gray-500">2012</p>
+        </div>
+        <div class="border-l-4 border-cyan-400 pl-4">
+         <h3 class="font-bold text-gray-800">Diploma in Computer Application (DCA)</h3>
+         <p class="text-gray-600">AICS Mission, Delhi</p>
+         <p class="text-sm text-gray-500">2009</p>
+        </div>
+        <div class="border-l-4 border-cyan-400 pl-4">
+         <h3 class="font-bold text-gray-800">S.S.C</h3>
+         <p class="text-gray-600">Gujarat Secondary Education Board</p>
+         <p class="text-sm text-gray-500">2004</p>
+        </div>
+       </div>
+      </div><!-- Achievements -->
+      <div>
+       <h2 class="text-3xl font-bold text-gray-800 mb-8 section-title">Achievements</h2>
+       <div class="space-y-6">
+        <div class="flex items-start gap-4 bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-lg">
+         <div class="text-4xl">
+          🏆
+         </div>
+         <div>
+          <h3 class="font-bold text-gray-800 mb-1">5-Star Performer Award</h3>
+          <p class="text-gray-600">SRK Pure Project</p>
+         </div>
+        </div>
+        <div class="flex items-start gap-4 bg-gradient-to-r from-cyan-50 to-blue-50 p-4 rounded-lg">
+         <div class="text-4xl">
+          🚀
+         </div>
+         <div>
+          <h3 class="font-bold text-gray-800 mb-1">Magnificent Performer Award</h3>
+          <p class="text-gray-600">For innovation and team contribution</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Contact Section -->
+   <section id="contact" class="py-20 px-6 bg-gray-50">
+    <div class="max-w-6xl mx-auto text-center">
+     <h2 class="text-4xl font-bold text-gray-800 mb-8 section-title inline-block">Get In Touch</h2>
+     <p class="text-lg text-gray-700 mb-12">I'm always open to discussing new opportunities, interesting projects, or potential collaborations.</p>
+     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div class="bg-white p-6 rounded-lg shadow-md">
+       <div class="text-3xl mb-3">
+        📧
+       </div>
+       <h3 class="font-bold text-gray-800 mb-2">Email</h3><a href="mailto:mukeshnthummar@gmail.com" id="contact-email" class="text-cyan-600 hover:text-cyan-700 break-all">mukeshnthummar@gmail.com</a>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-md">
+       <div class="text-3xl mb-3">
+        📞
+       </div>
+       <h3 class="font-bold text-gray-800 mb-2">Phone</h3><a href="tel:+919726896768" id="contact-phone" class="text-cyan-600 hover:text-cyan-700">+91 97268 96768</a>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-md">
+       <div class="text-3xl mb-3">
+        💼
+       </div>
+       <h3 class="font-bold text-gray-800 mb-2">LinkedIn</h3><a href="https://www.linkedin.com/in/mukesh-thummar-92213554/" id="linkedin-link" target="_blank" rel="noopener noreferrer" class="text-cyan-600 hover:text-cyan-700">View Profile</a>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-md">
+       <div class="text-3xl mb-3">
+        🔗
+       </div>
+       <h3 class="font-bold text-gray-800 mb-2">Naukri</h3><a href="https://www.naukri.com/mnjuser/profile" id="naukri-link" target="_blank" rel="noopener noreferrer" class="text-cyan-600 hover:text-cyan-700">View Profile</a>
+      </div>
+     </div>
+    </div>
+   </section><!-- Footer -->
+   <footer class="gradient-bg text-white py-8 px-6">
+    <div class="max-w-6xl mx-auto text-center">
+     <p class="text-lg mb-2">© 2026 Mukesh Thummar | Tech Enthusiast</p>
+     <p class="text-gray-300">Portfolio Website</p>
+    </div>
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      hero_name: "Mukesh N. Thummar",
+      hero_title: "Tech Enthusiast",
+      hero_location: "📍 Surat, Gujarat, India",
+      hero_tagline: "Results-driven software engineer with 15+ years of experience in enterprise application development, architecture, and team leadership.",
+      contact_email: "mukeshnthummar@gmail.com",
+      contact_phone: "+91 97268 96768",
+      linkedin_url: "https://www.linkedin.com/in/mukesh-thummar-92213554/",
+      naukri_url: "https://www.naukri.com/mnjuser/profile",
+      background_color: "#0f2847",
+      surface_color: "#ffffff",
+      text_color: "#1f2937",
+      primary_action_color: "#06b6d4",
+      secondary_action_color: "#1a4d7a"
+    };
+
+    async function onConfigChange(config) {
+      // Update text content
+      document.getElementById('nav-name').textContent = (config.hero_name || defaultConfig.hero_name).split(' ')[0] + ' ' + (config.hero_name || defaultConfig.hero_name).split(' ').slice(-1)[0];
+      document.getElementById('hero-name').textContent = config.hero_name || defaultConfig.hero_name;
+      document.getElementById('hero-title').textContent = config.hero_title || defaultConfig.hero_title;
+      document.getElementById('hero-location').textContent = config.hero_location || defaultConfig.hero_location;
+      document.getElementById('hero-tagline').textContent = config.hero_tagline || defaultConfig.hero_tagline;
+      document.getElementById('contact-email').textContent = config.contact_email || defaultConfig.contact_email;
+      document.getElementById('contact-email').href = 'mailto:' + (config.contact_email || defaultConfig.contact_email);
+      document.getElementById('contact-phone').textContent = config.contact_phone || defaultConfig.contact_phone;
+      document.getElementById('contact-phone').href = 'tel:' + (config.contact_phone || defaultConfig.contact_phone).replace(/\s/g, '');
+      document.getElementById('linkedin-link').href = config.linkedin_url || defaultConfig.linkedin_url;
+      document.getElementById('naukri-link').href = config.naukri_url || defaultConfig.naukri_url;
+
+      // Apply colors
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryActionColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+
+      // Update gradient backgrounds
+      const gradientElements = document.querySelectorAll('.gradient-bg');
+      gradientElements.forEach(el => {
+        el.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, ${secondaryActionColor} 100%)`;
+      });
+
+      // Update surface/card backgrounds
+      const surfaceElements = document.querySelectorAll('.bg-white');
+      surfaceElements.forEach(el => {
+        el.style.backgroundColor = surfaceColor;
+      });
+
+      // Update text colors
+      const headings = document.querySelectorAll('h1, h2, h3');
+      headings.forEach(el => {
+        if (!el.classList.contains('text-white')) {
+          el.style.color = textColor;
+        }
+      });
+
+      // Update primary action elements
+      const primaryButtons = document.querySelectorAll('.btn-primary');
+      primaryButtons.forEach(btn => {
+        btn.style.backgroundColor = primaryActionColor;
+        btn.style.borderColor = primaryActionColor;
+      });
+
+      // Update accent colors (borders, underlines)
+      const accentElements = document.querySelectorAll('.section-title::after, .timeline-item, .timeline-item::before');
+      document.documentElement.style.setProperty('--accent-color', primaryActionColor);
+      
+      // Update link colors
+      const links = document.querySelectorAll('a:not(.btn-primary):not(.btn-secondary)');
+      links.forEach(link => {
+        if (!link.closest('nav')) {
+          link.style.color = primaryActionColor;
+        }
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                config.secondary_action_color = value;
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["hero_name", config.hero_name || defaultConfig.hero_name],
+          ["hero_title", config.hero_title || defaultConfig.hero_title],
+          ["hero_location", config.hero_location || defaultConfig.hero_location],
+          ["hero_tagline", config.hero_tagline || defaultConfig.hero_tagline],
+          ["contact_email", config.contact_email || defaultConfig.contact_email],
+          ["contact_phone", config.contact_phone || defaultConfig.contact_phone],
+          ["linkedin_url", config.linkedin_url || defaultConfig.linkedin_url],
+          ["naukri_url", config.naukri_url || defaultConfig.naukri_url]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b88d13a22b5032b',t:'MTc2NzUwOTU5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
