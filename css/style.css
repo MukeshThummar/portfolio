@@ -198,6 +198,8 @@ pre { margin: 0; overflow: auto; color: #d7f7ff; font: 0.92rem/1.7 "JetBrains Mo
 .section-heading { max-width: 760px; margin-bottom: 34px; }
 .section-heading.center { text-align: center; margin-inline: auto; }
 .section-heading.split { display: flex; align-items: end; justify-content: space-between; gap: 24px; max-width: none; }
+.section-heading.split.reveal { position: relative; z-index: 10; }
+.project-grid { position: relative; z-index: 1; }
 
 .journey, .chips { display: flex; flex-wrap: wrap; gap: 10px; }
 .industry-strip {
@@ -288,7 +290,10 @@ pre { margin: 0; overflow: auto; color: #d7f7ff; font: 0.92rem/1.7 "JetBrains Mo
 .project-search {
   flex: 0 1 360px;
   min-width: 0;
+  position: relative;
+  z-index: 20;
 }
+.project-search-field { position: relative; }
 .search-box input {
   width: 100%;
   min-height: 46px;
@@ -298,6 +303,35 @@ pre { margin: 0; overflow: auto; color: #d7f7ff; font: 0.92rem/1.7 "JetBrains Mo
   color: var(--text);
   padding: 10px 12px;
 }
+.project-suggestions {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.project-suggestions[hidden] { display: none; }
+.project-suggestions button {
+  display: block;
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+  font: .82rem "JetBrains Mono", monospace;
+}
+.project-suggestions button:hover,
+.project-suggestions button:focus-visible { background: var(--surface-strong); color: var(--text); }
 .filter-btn {
   border: 1px solid var(--border);
   background: var(--surface);

@@ -41,6 +41,8 @@
   .footer-grid { grid-template-columns: 1fr; justify-items: start; gap: 22px; }
   .footer-nav { justify-content: flex-start; flex-wrap: wrap; }
   .footer-meta { justify-items: start; }
+  .project-search { width: 100%; flex-basis: 100%; }
+  .project-suggestions { max-height: 180px; }
   .timeline-item { margin-left: 34px; }
   .timeline::before { left: 10px; }
   .timeline-item::before { left: -32px; }

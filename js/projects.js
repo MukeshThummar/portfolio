@@ -50,8 +50,8 @@
 
   function renderSearchSuggestions(projects) {
     const suggestions = [...new Set(projects.flatMap((project) => [project.name, project.category, ...project.stack]))].sort();
-    document.querySelectorAll("#project-search-suggestions").forEach((list) => {
-      list.innerHTML = suggestions.map((suggestion) => `<option value="${suggestion}"></option>`).join("");
+    document.querySelectorAll("[data-project-suggestions]").forEach((list) => {
+      list.dataset.suggestions = JSON.stringify(suggestions);
     });
   }
 
@@ -72,12 +72,36 @@
     }
 
     document.querySelectorAll("[data-project-search]").forEach((input) => {
+      const suggestionList = input.closest(".project-search-field")?.querySelector("[data-project-suggestions]");
+      const getSuggestions = () => JSON.parse(suggestionList?.dataset.suggestions || "[]");
+      const renderSuggestions = () => {
+        const query = input.value.trim().toLowerCase();
+        const matches = getSuggestions().filter((suggestion) => !query || suggestion.toLowerCase().includes(query)).slice(0, 12);
+        if (!suggestionList) return;
+        suggestionList.innerHTML = matches.map((suggestion) => `<button type="button" role="option" data-search-suggestion="${suggestion}">${suggestion}</button>`).join("");
+        suggestionList.hidden = matches.length === 0;
+      };
+
       input.addEventListener("input", () => {
         document.querySelectorAll("[data-project-search]").forEach((other) => {
           if (other !== input) other.value = input.value;
         });
+        document.querySelectorAll("[data-project-suggestions]").forEach((other) => { if (other !== suggestionList) other.hidden = true; });
+        renderSuggestions();
         applyProjectFilters();
       });
+      input.addEventListener("focus", renderSuggestions);
+      suggestionList?.addEventListener("click", (event) => {
+        const suggestion = event.target.closest("[data-search-suggestion]");
+        if (!suggestion) return;
+        input.value = suggestion.dataset.searchSuggestion;
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        suggestionList.hidden = true;
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".project-search-field")) document.querySelectorAll("[data-project-suggestions]").forEach((list) => { list.hidden = true; });
     });
   }).catch(() => {
     mounts.forEach((mount) => { mount.innerHTML = "<p>Projects are temporarily unavailable.</p>"; });

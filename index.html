@@ -161,11 +161,13 @@
             <h2>Things I've Built</h2>
             <p>A selection of applications, experiments and products from my GitHub workspace.</p>
           </div>
-          <label class="search-box project-search" aria-label="Quick search projects">
-              <span>Quick search</span>
-              <input type="search" data-project-search list="project-search-suggestions" placeholder="Search project, stack or category">
-          </label>
-          <datalist id="project-search-suggestions"></datalist>
+          <div class="search-box project-search">
+            <label for="home-project-search">Quick search</label>
+            <div class="project-search-field">
+              <input id="home-project-search" type="search" data-project-search autocomplete="off" placeholder="Search project, stack or category">
+              <div class="project-suggestions" data-project-suggestions role="listbox" aria-label="Project search suggestions"></div>
+            </div>
+          </div>
         </div>
         <div class="project-grid" data-projects></div>
         <div class="center action-space">
