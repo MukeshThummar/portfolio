@@ -361,42 +361,74 @@ pre { margin: 0; overflow: auto; color: #d7f7ff; font: 0.92rem/1.7 "JetBrains Mo
 .card-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
 .card-actions a { color: var(--accent); font-weight: 700; }
 
-.architecture-diagram {
-  position: relative;
+.engineering-heading { max-width: 720px; margin-bottom: 42px; }
+.flow-board {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  padding: 26px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  gap: 22px;
 }
-.flow-block { padding: 18px; border: 1px solid var(--border); border-radius: var(--radius); background: color-mix(in srgb, var(--surface) 76%, var(--accent)); }
-.agent-block { background: color-mix(in srgb, var(--surface) 76%, var(--primary)); }
+.flow-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--surface) 88%, var(--accent)), var(--surface));
+  box-shadow: var(--shadow);
+}
+.agent-flow-card {
+  border-top-color: var(--primary);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--surface) 88%, var(--primary)), var(--surface));
+}
+.flow-card-header { margin-bottom: 26px; }
+.flow-kicker {
+  color: var(--accent);
+  font: 0.76rem "JetBrains Mono", monospace;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.agent-flow-card .flow-kicker { color: color-mix(in srgb, var(--primary), white 22%); }
+.flow-card h3 { margin-top: 10px; font-size: 1.7rem; }
+.flow-card-header p { margin: 12px 0 0; color: var(--muted); }
 .flow-column {
   display: grid;
   gap: 12px;
 }
-.flow-title {
-  margin: 0;
-  color: var(--accent);
-  font: 0.82rem "JetBrains Mono", monospace;
-  text-align: center;
-}
-.architecture-diagram span {
+.flow-column span {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 12px;
-  text-align: center;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-strong);
 }
-.flow-column span + span::before { content: "v"; display: block; color: var(--accent); margin: -8px 0 6px; }
-.agent-flow span {
+.flow-column span + span::before {
+  content: "↓";
+  position: absolute;
+  margin-top: -40px;
+  color: var(--accent);
+  font: 1rem "JetBrains Mono", monospace;
+}
+.flow-column span b {
+  min-width: 28px;
+  color: var(--accent);
+  font: 0.74rem "JetBrains Mono", monospace;
+}
+.agent-flow-card .flow-column span {
   background: color-mix(in srgb, var(--surface-strong) 72%, var(--primary));
 }
-.side-note { position: absolute; top: 44%; color: var(--accent); font: 0.82rem "JetBrains Mono", monospace; }
-.side-note.left { left: -24px; transform: rotate(-90deg); }
-.side-note.right { right: -78px; transform: rotate(90deg); }
+.agent-flow-card .flow-column span + span::before,
+.agent-flow-card .flow-column span b { color: color-mix(in srgb, var(--primary), white 22%); }
+.flow-card-footer {
+  margin-top: auto;
+  padding-top: 22px;
+  color: var(--muted);
+  font: 0.78rem "JetBrains Mono", monospace;
+}
 
 .contact-card {
   display: flex;

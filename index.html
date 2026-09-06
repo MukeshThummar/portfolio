@@ -178,27 +178,44 @@
     </section>
 
     <section class="section alt" id="thinking">
-      <div class="wrap architecture-grid">
-        <div class="section-heading reveal">
+      <div class="wrap">
+        <div class="section-heading engineering-heading reveal">
           <p class="eyebrow">Engineering</p>
           <h2>How I Think About Software</h2>
           <p>Good systems are easier to change, easier to observe and easier for teams to understand.</p>
         </div>
-        <div class="architecture-diagram reveal" aria-label="Software architecture and background process diagram">
-          <div class="flow-block">
-            <div class="flow-column">
-            <p class="flow-title">Application Flow</p>
-            <span>User</span><span>Frontend</span><span>API / Services</span><span>Business Logic</span><span>Data Layer</span><span>Database / Cache / Search</span>
+        <div class="flow-board">
+          <article class="flow-card application-flow reveal">
+            <div class="flow-card-header">
+              <span class="flow-kicker">01 / Request path</span>
+              <h3>Application Flow</h3>
+              <p>How a user action travels through the product, where decisions are made, and how the system returns a reliable result.</p>
             </div>
-          </div>
-          <div class="flow-block agent-block">
-            <div class="flow-column agent-flow">
-            <p class="flow-title">Agentic / Background Flow</p>
-            <span>Trigger / Schedule</span><span>Queue / Event</span><span>Worker Service</span><span>AI-assisted Task</span><span>Validation / Logs</span><span>Notification / Result</span>
+            <div class="flow-column" aria-label="Application flow stages">
+              <span><b>01</b>User</span>
+              <span><b>02</b>Frontend</span>
+              <span><b>03</b>API / Services</span>
+              <span><b>04</b>Business Logic</span>
+              <span><b>05</b>Data Layer</span>
+              <span><b>06</b>Database / Cache / Search</span>
             </div>
-          </div>
-          <div class="side-note left">DevOps</div>
-          <div class="side-note right">AI-assisted development</div>
+            <footer class="flow-card-footer">Synchronous, observable and built around clear ownership.</footer>
+          </article>
+          <article class="flow-card agent-flow-card reveal">
+            <div class="flow-card-header">
+              <span class="flow-kicker">02 / Autonomous work</span>
+              <h3>Agentic / Background Flow</h3>
+              <p>How scheduled or event-driven work runs away from the request, with guardrails for retries, validation, monitoring and human feedback.</p>
+            </div>
+            <div class="flow-column" aria-label="Agentic and background flow stages">
+              <span><b>01</b>Trigger / Schedule</span>
+              <span><b>02</b>Queue / Event</span>
+              <span><b>03</b>Worker Service</span>
+              <span><b>04</b>Validation / Logs</span>
+              <span><b>05</b>Notification / Result</span>
+            </div>
+            <footer class="flow-card-footer">Asynchronous, resilient and designed to make progress visible.</footer>
+          </article>
         </div>
       </div>
     </section>
