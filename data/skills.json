@@ -1,0 +1,9 @@
+[
+  {"category": "AI & Developer Productivity", "items": ["ChatGPT", "GitHub Copilot", "Claude Code", "Cursor", "Microsoft 365 Copilot"]},
+  {"category": "Backend", "items": ["C#", ".NET", ".NET Core", "ASP.NET", "MVC", "Node.js", "WCF", "Entity Framework"]},
+  {"category": "Frontend", "items": ["React", "JavaScript", "jQuery", "KendoUI"]},
+  {"category": "Databases", "items": ["SQL Server", "PostgreSQL", "MySQL", "MongoDB", "Azure SQL", "Redis"]},
+  {"category": "Search & Messaging", "items": ["Elasticsearch", "RabbitMQ"]},
+  {"category": "DevOps", "items": ["Git", "Jenkins", "CI/CD", "Flyway", "Azure Key Vault"]},
+  {"category": "Reporting", "items": ["RDLC", "Crystal Reports", "Active Reports", "DevExpress", "Infragistics"]}
+]

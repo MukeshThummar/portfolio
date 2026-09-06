@@ -1,0 +1,116 @@
+[
+  {
+    "title": "SQL Server Statements Explained",
+    "category": "SQL",
+    "summary": "A practical guide to reading and writing common SQL Server statements with confidence.",
+    "description": [
+      "Explain SELECT, WHERE, JOIN, GROUP BY, HAVING and ORDER BY in a developer-friendly way.",
+      "Show how INSERT, UPDATE, DELETE and MERGE should be used carefully in real systems.",
+      "Include examples for transactions, stored procedures, views and common debugging patterns."
+    ],
+    "readTime": "9 min read",
+    "date": "Future idea",
+    "tags": ["SQL Server", "T-SQL", "Database"],
+    "draft": true
+  },
+  {
+    "title": "How Indexing Works in SQL",
+    "category": "Database",
+    "summary": "A clear explanation of how indexes help queries, when they hurt writes and how to reason about execution plans.",
+    "description": [
+      "Cover clustered and non-clustered indexes, composite keys and covering indexes.",
+      "Explain seeks, scans, selectivity, fragmentation and the tradeoff between read speed and write cost.",
+      "Walk through practical indexing decisions for enterprise application queries."
+    ],
+    "readTime": "10 min read",
+    "date": "Future idea",
+    "tags": ["Indexing", "Performance", "SQL Server"],
+    "draft": true
+  },
+  {
+    "title": "What's New in .NET 8",
+    "category": ".NET",
+    "summary": ".NET 8 is an LTS release with runtime, SDK, ASP.NET Core, EF Core and C# 12 improvements.",
+    "description": [
+      "Summarize performance, garbage collection, SDK/tooling and Native AOT improvements.",
+      "Highlight ASP.NET Core, EF Core, MAUI, Windows Forms and WPF areas that matter to application teams.",
+      "Add a migration checklist for teams moving from older .NET versions."
+    ],
+    "readTime": "8 min read",
+    "date": "Future idea",
+    "tags": [".NET 8", "C# 12", "LTS"],
+    "draft": true,
+    "source": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8/overview"
+  },
+  {
+    "title": "What's New in .NET 10",
+    "category": ".NET",
+    "summary": ".NET 10 is an LTS release with updates across the runtime, libraries, SDK, ASP.NET Core, C# 14 and EF Core.",
+    "description": [
+      "Explain the most useful runtime, library and SDK changes for enterprise developers.",
+      "Cover ASP.NET Core improvements, C# 14 language updates and EF Core 10 highlights at a practical level.",
+      "Call out compatibility and migration considerations before upgrading production systems."
+    ],
+    "readTime": "9 min read",
+    "date": "Future idea",
+    "tags": [".NET 10", "C# 14", "LTS"],
+    "draft": true,
+    "source": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10/overview"
+  },
+  {
+    "title": "AI-Assisted Software Development",
+    "category": "AI for Developers",
+    "summary": "How AI coding assistants are changing everyday software engineering workflows.",
+    "description": [
+      "Describe where AI helps most: boilerplate, refactoring, debugging, documentation and test ideas.",
+      "Discuss review discipline, context quality and how to keep engineers in control.",
+      "Share practical workflows for pairing with tools such as ChatGPT, Copilot, Cursor and Claude Code."
+    ],
+    "readTime": "6 min read",
+    "date": "Future idea",
+    "tags": ["AI-assisted coding", "Productivity", "Engineering"],
+    "draft": true
+  },
+  {
+    "title": "GitHub Copilot vs Cursor vs Claude Code",
+    "category": "Developer Productivity",
+    "summary": "A practical comparison of AI developer tools from the perspective of daily coding work.",
+    "description": [
+      "Compare strengths for code completion, repository navigation, refactoring and multi-file changes.",
+      "Explain where each tool fits in an experienced developer's daily workflow.",
+      "Keep the comparison practical, with examples rather than hype."
+    ],
+    "readTime": "8 min read",
+    "date": "Future idea",
+    "tags": ["Copilot", "Cursor", "Claude Code"],
+    "draft": true
+  },
+  {
+    "title": "Modernizing Legacy .NET Applications",
+    "category": ".NET",
+    "summary": "Practical considerations when migrating long-running enterprise systems to modern .NET.",
+    "description": [
+      "Start with assessment: dependencies, hosting model, data access, UI framework and deployment pipeline.",
+      "Discuss incremental migration, test coverage, API boundaries and compatibility risks.",
+      "Show how modernization can improve maintainability without pausing business delivery."
+    ],
+    "readTime": "7 min read",
+    "date": "Future idea",
+    "tags": [".NET", "Modernization", "Architecture"],
+    "draft": true
+  },
+  {
+    "title": "SQL Server to PostgreSQL Migration",
+    "category": "Database",
+    "summary": "Lessons, tools and common challenges when moving relational workloads across database platforms.",
+    "description": [
+      "Compare data types, stored procedures, identity columns, indexing and query behavior.",
+      "Discuss migration planning, validation, performance testing and rollout strategy.",
+      "Share common surprises teams should check before production cutover."
+    ],
+    "readTime": "7 min read",
+    "date": "Future idea",
+    "tags": ["SQL Server", "PostgreSQL", "Migration"],
+    "draft": true
+  }
+]
