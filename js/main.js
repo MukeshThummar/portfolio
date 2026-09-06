@@ -25,6 +25,14 @@
       const isOpen = menu.classList.toggle("open");
       toggle.setAttribute("aria-expanded", String(isOpen));
     }
+
+    const menuLink = event.target.closest("[data-nav-menu] a");
+    if (menuLink) {
+      const menu = menuLink.closest("[data-nav-menu]");
+      const menuToggle = document.querySelector("[data-nav-toggle]");
+      menu.classList.remove("open");
+      menuToggle?.setAttribute("aria-expanded", "false");
+    }
   });
 
   const revealItems = document.querySelectorAll(".reveal");
