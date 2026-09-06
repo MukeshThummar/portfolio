@@ -5,8 +5,10 @@
   .hero { min-height: auto; }
   .hero-visual { min-height: 420px; }
   .skill-grid, .project-grid, .blog-grid, .achievement-grid, .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .industry-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .section-heading.split { align-items: flex-start; flex-direction: column; }
   .filters { justify-content: flex-start; }
+  .architecture-diagram { grid-template-columns: 1fr; }
   .side-note { position: static; transform: none !important; text-align: center; }
 }
 
@@ -30,9 +32,15 @@
   .nav-actions { margin-left: auto; }
   .brand strong { display: none; }
   .skill-grid, .project-grid, .blog-grid, .achievement-grid, .product-grid { grid-template-columns: 1fr; }
+  .industry-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact-card { flex-direction: column; align-items: flex-start; }
   .hero-actions, .contact-actions { width: 100%; }
+  .contact-actions { flex-wrap: wrap; }
   .btn { width: 100%; }
+  .contact-actions .contact-link { width: 46px; }
+  .footer-grid { grid-template-columns: 1fr; justify-items: start; gap: 22px; }
+  .footer-nav { justify-content: flex-start; flex-wrap: wrap; }
+  .footer-meta { justify-items: start; }
   .timeline-item { margin-left: 34px; }
   .timeline::before { left: 10px; }
   .timeline-item::before { left: -32px; }
@@ -44,4 +52,5 @@
   .hero-visual { min-height: 330px; }
   .code-panel { left: 5%; right: 5%; }
   .section { padding: 58px 0; }
+  .industry-strip { grid-template-columns: 1fr; }
 }

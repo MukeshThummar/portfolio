@@ -34,7 +34,7 @@ The site can be deployed directly to GitHub Pages, Netlify, Vercel static hostin
 - Blog cards are intentionally marked as future ideas, not published articles.
 - Project descriptions use verified public GitHub metadata where available and avoid inventing unverified behavior.
 - No sensitive personal information is included.
-- The email CTA is marked as available on request because no verified public email address was provided in the source material.
+- Contact details include `mukeshnthummar@gmail.com` and WhatsApp at `+91 9726896768`.
 
 ## Future Asset Guidance
 

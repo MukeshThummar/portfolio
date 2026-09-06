@@ -1,7 +1,6 @@
 (function () {
   const mounts = document.querySelectorAll("[data-projects]");
-  const productMounts = document.querySelectorAll("[data-products]");
-  if (!mounts.length && !productMounts.length) return;
+  if (!mounts.length) return;
 
   const apiUrl = "https://api.github.com/users/MukeshThummar/repos?per_page=100&sort=updated";
 
@@ -49,46 +48,35 @@
     `;
   }
 
-  function productCard(project) {
-    return `
-      <article class="product-card reveal visible">
-        <p class="eyebrow">${project.category}</p>
-        <h3>${project.name}</h3>
-        <p><strong>Problem:</strong> ${project.problem}</p>
-        <p><strong>Solution:</strong> ${project.solution}</p>
-        <p><strong>Result:</strong> ${project.result}</p>
-        <div class="project-stack">${project.stack.map((item) => `<span>${item}</span>`).join("")}</div>
-        <div class="card-actions"><a href="${project.repo}" target="_blank" rel="noreferrer">View Project</a>${project.demo ? `<a href="${project.demo}" target="_blank" rel="noreferrer">Live Demo</a>` : ""}</div>
-      </article>
-    `;
-  }
-
-  function renderFilters(projects) {
-    const filterMounts = document.querySelectorAll("[data-project-filters]");
-    const categories = ["All", ...new Set(projects.map((project) => project.category))];
-    filterMounts.forEach((mount) => {
-      mount.innerHTML = categories.map((category) => `<button class="filter-btn ${category === "All" ? "active" : ""}" type="button" data-project-filter="${category}">${category}</button>`).join("");
+  function renderSearchSuggestions(projects) {
+    const suggestions = [...new Set(projects.flatMap((project) => [project.name, project.category, ...project.stack]))].sort();
+    document.querySelectorAll("#project-search-suggestions").forEach((list) => {
+      list.innerHTML = suggestions.map((suggestion) => `<option value="${suggestion}"></option>`).join("");
     });
   }
 
   getProjects().then((projects) => {
-    renderFilters(projects);
+    renderSearchSuggestions(projects);
     mounts.forEach((mount) => {
       const showAll = mount.dataset.showAll === "true";
       const list = showAll ? projects : projects.filter((project) => project.featured).slice(0, 6);
       mount.innerHTML = list.map(card).join("");
     });
-    productMounts.forEach((mount) => {
-      mount.innerHTML = projects.filter((project) => project.product).slice(0, 4).map(productCard).join("");
-    });
 
-    document.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-project-filter]");
-      if (!button) return;
-      const category = button.dataset.projectFilter;
-      document.querySelectorAll("[data-project-filter]").forEach((item) => item.classList.toggle("active", item.dataset.projectFilter === category));
+    function applyProjectFilters() {
+      const query = document.querySelector("[data-project-search]")?.value.trim().toLowerCase() || "";
       document.querySelectorAll(".project-card").forEach((item) => {
-        item.hidden = category !== "All" && item.dataset.category !== category;
+        const matchesSearch = query.length === 0 || item.textContent.toLowerCase().includes(query);
+        item.hidden = !matchesSearch;
+      });
+    }
+
+    document.querySelectorAll("[data-project-search]").forEach((input) => {
+      input.addEventListener("input", () => {
+        document.querySelectorAll("[data-project-search]").forEach((other) => {
+          if (other !== input) other.value = input.value;
+        });
+        applyProjectFilters();
       });
     });
   }).catch(() => {
