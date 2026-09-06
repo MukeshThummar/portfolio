@@ -112,7 +112,7 @@ button, input { font: inherit; }
   place-items: center;
   cursor: pointer;
 }
-.theme-toggle { padding: 0 12px; font-size: 0.82rem; }
+.theme-toggle { padding: 0; font-size: 1.15rem; }
 .nav-toggle { display: none; gap: 4px; }
 .nav-toggle span { width: 18px; height: 2px; background: currentColor; display: block; }
 

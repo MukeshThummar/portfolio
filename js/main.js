@@ -8,7 +8,7 @@
     root.dataset.theme = theme;
     localStorage.setItem("theme", theme);
     document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
-      button.textContent = theme === "dark" ? "Light" : "Dark";
+      button.querySelector(".theme-icon").textContent = theme === "dark" ? "☼" : "☾";
       button.setAttribute("aria-label", `Switch to ${theme === "dark" ? "light" : "dark"} theme`);
     });
   }
