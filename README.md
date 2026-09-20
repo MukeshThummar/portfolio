@@ -4,7 +4,8 @@ Static portfolio website for Mukesh Thummar, built with semantic HTML, modern CS
 
 ## What Is Included
 
-- Multi-page static website: `index.html`, `about.html`, `projects.html`, `blogs.html`, `contact.html`
+- Single-page static website centered on `index.html`, with About, Projects, Blogs and Contact sections
+- Legacy page URLs redirect to their matching sections on `index.html`
 - Responsive dark/light theme
 - Data-driven skills, projects and blog idea cards
 - Public GitHub API enrichment with local JSON fallback
