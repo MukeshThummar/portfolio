@@ -34,11 +34,41 @@
         <article class="guide-section">
           <h3>${section.title}</h3>
           <p>${section.body}</p>
-          <pre><code>${section.example}</code></pre>
+          <div class="query-layout">
+            <div class="query-pane">
+              <div class="query-pane-header"><span>SQL query</span><button class="copy-query" type="button" data-copy-query aria-label="Copy SQL query" title="Copy SQL query"><span aria-hidden="true">⧉</span><span class="copy-label">Copy</span></button></div>
+              <pre><code>${section.example}</code></pre>
+            </div>
+            ${section.sample || section.parameters || section.output ? `<div class="query-reference">${section.parameters ? `<div><h4>Parameter values</h4><pre><code>${section.parameters}</code></pre></div>` : ""}<div><h4>Sample data</h4><pre><code>${section.sample || "No sample data provided."}</code></pre></div><div><h4>Expected output</h4><pre><code>${section.output || "See the query result."}</code></pre></div></div>` : ""}
+          </div>
           <p><strong>Why it matters:</strong> ${section.note}</p>
           <p><strong>Real-time scenario:</strong> ${section.scenario}</p>
         </article>
       `).join("");
+      dialogContent.querySelectorAll("[data-copy-query]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const query = button.closest(".query-pane").querySelector("code").textContent;
+          try {
+            if (navigator.clipboard?.writeText) {
+              await navigator.clipboard.writeText(query);
+            } else {
+              const input = document.createElement("textarea");
+              input.value = query;
+              input.setAttribute("readonly", "");
+              input.style.position = "fixed";
+              input.style.opacity = "0";
+              document.body.appendChild(input);
+              input.select();
+              if (!document.execCommand("copy")) throw new Error("Copy command failed");
+              input.remove();
+            }
+            button.querySelector(".copy-label").textContent = "Copied";
+            setTimeout(() => { button.querySelector(".copy-label").textContent = "Copy"; }, 1600);
+          } catch (error) {
+            button.querySelector(".copy-label").textContent = "Copy failed";
+          }
+        });
+      });
       dialog.showModal();
     }
 

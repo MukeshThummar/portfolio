@@ -6,6 +6,8 @@
       "title": "1. SELECT: read the data you need",
       "body": "SELECT chooses columns and reads rows from one or more tables. Start with explicit column names instead of SELECT * so the query stays stable when the table changes.",
       "example": "SELECT CustomerId, FullName, Email\nFROM dbo.Customers;",
+      "sample": "CustomerId | FullName       | Email\n101        | Asha Patel    | asha@example.com\n102        | Daniel Wong   | daniel@example.com",
+      "output": "CustomerId | FullName       | Email\n101        | Asha Patel    | asha@example.com\n102        | Daniel Wong   | daniel@example.com",
       "note": "The FROM clause identifies the source table. The result contains only the three requested columns.",
       "scenario": "A customer profile screen can use this query to load the fields it needs without transferring private or unused columns."
     },
@@ -13,20 +15,46 @@
       "title": "2. WHERE: filter rows early",
       "body": "WHERE applies conditions before rows are returned. Use parameters from application code and compare dates with ranges when you need reliable index usage.",
       "example": "SELECT OrderId, CustomerId, TotalAmount\nFROM dbo.Orders\nWHERE Status = @Status\n  AND CreatedAt >= @StartDate\n  AND CreatedAt < @EndDate;",
+      "parameters": "@Status = 'Completed'\n@StartDate = '2026-09-20 00:00:00'\n@EndDate   = '2026-09-21 00:00:00'",
+      "sample": "OrderId | CustomerId | Status    | CreatedAt           | TotalAmount\n5001    | 101        | Completed | 2026-09-20 09:15:00 | 125.00\n5002    | 101        | Pending   | 2026-09-20 10:30:00 | 80.00",
+      "output": "OrderId | CustomerId | TotalAmount\n5001    | 101        | 125.00",
       "note": "@Status, @StartDate and @EndDate should be parameters, not string-concatenated values.",
       "scenario": "An admin report can safely fetch only completed orders for one business day while avoiding SQL injection and accidental time-zone boundaries."
     },
     {
       "title": "3. JOIN: combine related data",
-      "body": "JOIN connects rows through related keys. INNER JOIN returns matching rows only; LEFT JOIN keeps every row from the left table even when a related row does not exist.",
-      "example": "SELECT o.OrderId, c.FullName, o.TotalAmount\nFROM dbo.Orders AS o\nINNER JOIN dbo.Customers AS c\n  ON c.CustomerId = o.CustomerId;",
+      "body": "JOIN connects rows through related keys. INNER JOIN returns matching rows only; LEFT JOIN keeps every row from the left table even when a related row does not exist. RIGHT JOIN keeps every row from the right table, although many teams prefer rewriting it as a LEFT JOIN for readability.",
+      "example": "-- Matching orders only\nSELECT o.OrderId, c.FullName\nFROM dbo.Orders AS o\nINNER JOIN dbo.Customers AS c ON c.CustomerId = o.CustomerId;\n\n-- Keep customers with no orders\nSELECT c.CustomerId, c.FullName, o.OrderId\nFROM dbo.Orders AS o\nRIGHT JOIN dbo.Customers AS c ON c.CustomerId = o.CustomerId;\n\n-- Equivalent, usually clearer LEFT JOIN\nSELECT c.CustomerId, c.FullName, o.OrderId\nFROM dbo.Customers AS c\nLEFT JOIN dbo.Orders AS o ON o.CustomerId = c.CustomerId;",
+      "sample": "Customers: CustomerId | FullName\n101        | Asha Patel\n102        | Daniel Wong\n\nOrders: OrderId | CustomerId | TotalAmount\n5001    | 101        | 125.00",
+      "output": "INNER JOIN: 5001 | Asha Patel\nRIGHT/LEFT JOIN: 5001 | Asha Patel\n                NULL | Daniel Wong",
       "note": "Put the relationship in ON. Keep business filters in WHERE so the query is easier to reason about.",
       "scenario": "An order list can show the customer name without duplicating customer data in the Orders table."
     },
     {
-      "title": "4. GROUP BY: summarize rows",
+      "title": "4. LEFT JOIN and RIGHT JOIN: preserve unmatched rows",
+      "body": "Use LEFT JOIN when every row from the first table must remain in the result. Use RIGHT JOIN when every row from the second table must remain; in practice, swapping table order and using LEFT JOIN is often easier to read.",
+      "example": "SELECT c.FullName, o.OrderId\nFROM dbo.Customers AS c\nLEFT JOIN dbo.Orders AS o\n  ON o.CustomerId = c.CustomerId\nORDER BY c.FullName;\n\nSELECT c.FullName, o.OrderId\nFROM dbo.Orders AS o\nRIGHT JOIN dbo.Customers AS c\n  ON c.CustomerId = o.CustomerId;",
+      "sample": "Customers: CustomerId | FullName\n101        | Asha Patel\n102        | Daniel Wong\n\nOrders: OrderId | CustomerId\n5001    | 101",
+      "output": "FullName       | OrderId\nAsha Patel     | 5001\nDaniel Wong    | NULL",
+      "note": "A NULL OrderId means the customer exists but has no matching order. Be careful not to put a right-table filter in WHERE when you intend to preserve unmatched rows.",
+      "scenario": "A customer success report can list every customer, including new customers who have not placed an order yet."
+    },
+    {
+      "title": "5. OFFSET/FETCH: paginate ordered results",
+      "body": "OFFSET skips a number of rows and FETCH NEXT returns the next page. Always pair pagination with a deterministic ORDER BY, preferably including a unique tie-breaker.",
+      "example": "DECLARE @PageNumber int = 3;\nDECLARE @PageSize int = 20;\n\nSELECT OrderId, CreatedAt, TotalAmount\nFROM dbo.Orders\nORDER BY CreatedAt DESC, OrderId DESC\nOFFSET (@PageNumber - 1) * @PageSize ROWS\nFETCH NEXT @PageSize ROWS ONLY;",
+      "parameters": "@PageNumber = 3\n@PageSize = 20\nRows skipped = (3 - 1) * 20 = 40",
+      "sample": "OrderId | CreatedAt  | TotalAmount\n5001    | 2026-09-20 | 125.00\n...\n5040    | 2026-09-18 | 60.00\n5041    | 2026-09-18 | 55.00\n5042    | 2026-09-18 | 40.00",
+      "output": "Rows 41-60 in CreatedAt DESC, OrderId DESC order\nFor this 42-row sample: rows 41 and 42",
+      "note": "Large offsets can become slower because SQL Server still has to walk past skipped rows. For very large datasets, keyset pagination can be a better fit.",
+      "scenario": "An admin order grid can request page 3 with 20 rows per page while keeping navigation stable as long as the sort columns are deterministic."
+    },
+    {
+      "title": "6. GROUP BY: summarize rows",
       "body": "GROUP BY creates one result row per group. Every selected column must either be grouped or wrapped in an aggregate such as COUNT, SUM, AVG, MIN or MAX.",
       "example": "SELECT CustomerId, COUNT(*) AS OrderCount,\n       SUM(TotalAmount) AS LifetimeValue\nFROM dbo.Orders\nGROUP BY CustomerId;",
+      "sample": "CustomerId | TotalAmount\n101        | 125.00\n101        | 80.00\n102        | 50.00",
+      "output": "CustomerId | OrderCount | LifetimeValue\n101        | 2           | 205.00\n102        | 1           | 50.00",
       "note": "The query produces one summary row per customer rather than returning each individual order.",
       "scenario": "A CRM dashboard can rank customers by order count and total value without loading every order into the application."
     },
@@ -34,6 +62,8 @@
       "title": "5. HAVING: filter groups",
       "body": "HAVING filters after GROUP BY has created groups. Use WHERE for row-level filters and HAVING for aggregate conditions.",
       "example": "SELECT CustomerId, SUM(TotalAmount) AS LifetimeValue\nFROM dbo.Orders\nWHERE Status = 'Completed'\nGROUP BY CustomerId\nHAVING SUM(TotalAmount) >= 10000;",
+      "sample": "CustomerId | Status    | TotalAmount\n101        | Completed | 12000.00\n102        | Completed | 8500.00",
+      "output": "CustomerId | LifetimeValue\n101        | 12000.00",
       "note": "WHERE removes non-completed orders before grouping; HAVING keeps only high-value customer groups.",
       "scenario": "A loyalty process can find customers eligible for a premium support tier based on completed purchase value."
     },
@@ -41,6 +71,8 @@
       "title": "6. ORDER BY: make result order explicit",
       "body": "SQL tables do not have a guaranteed natural order. ORDER BY defines the order returned to the caller, and a unique tie-breaker makes paging predictable.",
       "example": "SELECT OrderId, CreatedAt, TotalAmount\nFROM dbo.Orders\nORDER BY CreatedAt DESC, OrderId DESC;",
+      "sample": "OrderId | CreatedAt  | TotalAmount\n5001    | 2026-09-20 | 125.00\n5002    | 2026-09-19 | 80.00",
+      "output": "Rows sorted newest first:\n5001 | 2026-09-20 | 125.00\n5002 | 2026-09-19 | 80.00",
       "note": "The second sort column prevents rows with the same CreatedAt value from moving between pages.",
       "scenario": "A support queue can consistently show the newest tickets first even when multiple tickets arrive in the same millisecond."
     },
@@ -48,6 +80,9 @@
       "title": "7. INSERT: add data deliberately",
       "body": "INSERT creates rows. Name the target columns, validate input in the application and database, and capture the generated key when the next operation depends on it.",
       "example": "INSERT INTO dbo.Customers (FullName, Email)\nOUTPUT INSERTED.CustomerId\nVALUES (@FullName, @Email);",
+      "parameters": "@FullName = 'Asha Patel'\n@Email = 'asha@example.com'",
+      "sample": "Customers before insert: CustomerId | FullName | Email\n101 | Daniel Wong | daniel@example.com",
+      "output": "CustomerId\n103",
       "note": "A unique constraint on Email should enforce the business rule at the database boundary too.",
       "scenario": "A registration endpoint can insert a customer and use the returned CustomerId to create the initial preferences row."
     },
@@ -55,6 +90,9 @@
       "title": "8. UPDATE: change only intended rows",
       "body": "UPDATE is powerful because it can affect many rows. Always verify the WHERE clause with a SELECT first, and use a transaction when related changes must succeed together.",
       "example": "UPDATE dbo.Orders\nSET Status = @NewStatus, UpdatedAt = SYSUTCDATETIME()\nWHERE OrderId = @OrderId\n  AND Status = 'Pending';",
+      "parameters": "@OrderId = 5002\n@NewStatus = 'Paid'",
+      "sample": "OrderId | Status  | UpdatedAt\n5002    | Pending | 2026-09-20 10:30:00",
+      "output": "1 row updated\nOrderId 5002 | Status Paid",
       "note": "The old status condition prevents a late worker from overwriting a newer state transition.",
       "scenario": "A background payment worker can mark only still-pending orders as paid, making retries safer."
     },
@@ -62,6 +100,8 @@
       "title": "9. DELETE: remove with a safety check",
       "body": "DELETE permanently removes rows unless the database is protected by a retention or soft-delete design. Preview the exact rows and use a transaction before destructive operations.",
       "example": "BEGIN TRANSACTION;\n\nDELETE FROM dbo.Sessions\nWHERE ExpiresAt < SYSUTCDATETIME();\n\nSELECT @@ROWCOUNT AS DeletedRows;\n-- COMMIT after review, or ROLLBACK;",
+      "sample": "SessionId | ExpiresAt\n9001      | 2026-09-19\n9002      | 2026-09-21",
+      "output": "DeletedRows\n1",
       "note": "In production, prefer a scheduled cleanup job with limits, monitoring and an established retention policy.",
       "scenario": "An operations job can remove expired login sessions while recording how many rows were affected."
     },
@@ -69,6 +109,9 @@
       "title": "10. MERGE: use cautiously for synchronization",
       "body": "MERGE can combine insert and update behavior, but its concurrency and edge cases make it harder to review. For critical systems, separate UPDATE and INSERT statements inside a transaction are often clearer.",
       "example": "MERGE dbo.ProductStock AS target\nUSING @StockChanges AS source\n  ON target.ProductId = source.ProductId\nWHEN MATCHED THEN\n  UPDATE SET Quantity = source.Quantity\nWHEN NOT MATCHED THEN\n  INSERT (ProductId, Quantity)\n  VALUES (source.ProductId, source.Quantity);",
+      "parameters": "@StockChanges = (ProductId, Quantity)\n(10, 8)\n(11, 3)",
+      "sample": "Existing: ProductId | Quantity\n10         | 4",
+      "output": "ProductId | Quantity\n10         | 8\n11         | 3",
       "note": "Test duplicate source keys, concurrent writes, constraints and error handling before adopting MERGE for production synchronization.",
       "scenario": "A nightly import may synchronize inventory, but a stored procedure with explicit statements can be easier to retry and audit."
     },
@@ -76,6 +119,9 @@
       "title": "11. Transactions: keep a unit of work together",
       "body": "A transaction groups changes so they commit together or roll back together. TRY...CATCH with XACT_STATE helps avoid leaving a transaction open after an error.",
       "example": "BEGIN TRY\n  BEGIN TRANSACTION;\n\n  UPDATE dbo.Accounts SET Balance = Balance - @Amount WHERE AccountId = @FromId;\n  UPDATE dbo.Accounts SET Balance = Balance + @Amount WHERE AccountId = @ToId;\n\n  COMMIT TRANSACTION;\nEND TRY\nBEGIN CATCH\n  IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;\n  THROW;\nEND CATCH;",
+      "parameters": "@FromId = 1001\n@ToId   = 1002\n@Amount = 75.00",
+      "sample": "AccountId | Balance\n1001      | 500.00\n1002      | 100.00",
+      "output": "1001 | 425.00\n1002 | 175.00\nBoth updates committed together",
       "note": "Keep transactions short. Long transactions hold locks, increase blocking and make recovery harder.",
       "scenario": "A money transfer must not debit one account unless the credit to the other account also succeeds."
     },
@@ -83,6 +129,9 @@
       "title": "12. Stored procedures: centralize database work",
       "body": "Stored procedures can centralize validation, permissions and multi-step data operations. Use clear parameters, SET NOCOUNT ON and predictable result shapes.",
       "example": "CREATE OR ALTER PROCEDURE dbo.GetCustomerOrders\n  @CustomerId int\nAS\nBEGIN\n  SET NOCOUNT ON;\n\n  SELECT OrderId, CreatedAt, TotalAmount\n  FROM dbo.Orders\n  WHERE CustomerId = @CustomerId\n  ORDER BY CreatedAt DESC;\nEND;",
+      "parameters": "@CustomerId = 101",
+      "sample": "OrderId | CustomerId | CreatedAt  | TotalAmount\n5001    | 101        | 2026-09-20 | 125.00\n5002    | 101        | 2026-09-19 | 80.00",
+      "output": "OrderId | CreatedAt  | TotalAmount\n5001    | 2026-09-20 | 125.00\n5002    | 2026-09-19 | 80.00",
       "note": "Treat procedure parameters and result sets as an API contract between the database and application.",
       "scenario": "Several services can use the same audited order lookup without each service reimplementing the joins and filters."
     },
@@ -90,14 +139,19 @@
       "title": "13. Views: expose reusable read models",
       "body": "A view stores a reusable SELECT definition. It can simplify reporting and hide join complexity, but it does not automatically solve performance problems or replace good indexes.",
       "example": "CREATE OR ALTER VIEW dbo.vw_OrderSummary\nAS\nSELECT o.OrderId, c.FullName, o.Status, o.TotalAmount\nFROM dbo.Orders AS o\nJOIN dbo.Customers AS c ON c.CustomerId = o.CustomerId;",
+      "sample": "Orders: 5001 | CustomerId 101 | Completed | 125.00\nCustomers: 101 | Asha Patel",
+      "output": "OrderId | FullName    | Status    | TotalAmount\n5001    | Asha Patel  | Completed | 125.00",
       "note": "Use views for stable read models and permissions boundaries; document the underlying tables and expected filters.",
       "scenario": "A reporting team can query a consistent order summary while the application keeps normalized tables underneath."
     },
     {
       "title": "14. Debugging patterns",
-      "body": "Debug from the data outward: reproduce with the smallest input, inspect the actual query and parameters, check row counts, review the execution plan, and look for blocking or constraint errors.",
+      "body": "Debug from the data outward: reproduce with the smallest input, inspect the actual query and parameters, check row counts, review the execution plan, and look for blocking or constraint errors. SET STATISTICS IO, TIME ON enables diagnostic messages for the next statements: IO reports data access and TIME reports CPU and elapsed duration. SET STATISTICS IO, TIME OFF turns those messages off again.",
       "example": "SET STATISTICS IO, TIME ON;\n\nSELECT OrderId, TotalAmount\nFROM dbo.Orders\nWHERE CustomerId = @CustomerId;\n\nSET STATISTICS IO, TIME OFF;",
-      "note": "Useful checks include the actual execution plan, sys.dm_exec_requests for active work, and sys.dm_tran_locks for blocking. Never enable diagnostic settings blindly in production.",
+      "parameters": "@CustomerId = 101",
+      "sample": "OrderId | CustomerId | TotalAmount\n5001    | 101        | 125.00\n5002    | 101        | 80.00",
+      "output": "OrderId | TotalAmount\n5001    | 125.00\n5002    | 80.00\n\nSTATISTICS IO example:\nTable 'Orders': logical reads 3, physical reads 0, read-ahead reads 0\n\nSTATISTICS TIME example:\nCPU time = 2 ms, elapsed time = 4 ms",
+      "note": "Read logical reads as the pages SQL Server processed from memory, physical reads as pages fetched from disk, and read-ahead reads as pages prefetched. CPU time is processor work; elapsed time is total wall-clock duration and may include waits. Compare the same parameters before and after a change, and use SET STATISTICS only for diagnostics, not as a replacement for an actual execution plan. Useful checks also include sys.dm_exec_requests for active work and sys.dm_tran_locks for blocking.",
       "scenario": "If an endpoint becomes slow, compare logical reads and duration before and after an index or query change, rather than guessing from application latency alone."
     }
   ]
