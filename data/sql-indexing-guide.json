@@ -1,0 +1,118 @@
+{
+  "title": "How Indexing Works in SQL",
+  "intro": "A practical guide to designing, reading and troubleshooting SQL Server indexes for real application workloads.",
+  "sections": [
+    {
+      "title": "1. What an index does",
+      "body": "An index is an additional data structure that helps SQL Server locate rows without reading the entire table. It works much like a book index: the engine can navigate to likely matches, then fetch the requested data.",
+      "example": "CREATE INDEX IX_Orders_CustomerId\nON dbo.Orders (CustomerId);\n\nSELECT OrderId, CreatedAt, TotalAmount\nFROM dbo.Orders\nWHERE CustomerId = @CustomerId;",
+      "note": "Indexes improve reads by adding a maintained access path, but they consume storage and must be updated when the table changes.",
+      "scenario": "A customer order page that searches by CustomerId can avoid scanning millions of orders after an appropriate index is created."
+    },
+    {
+      "title": "2. Clustered indexes",
+      "body": "A clustered index defines the logical order of the table data. A table can have only one clustered index because the rows can have only one primary storage order. Primary keys are commonly clustered, but that is a design choice rather than a rule.",
+      "example": "CREATE CLUSTERED INDEX CX_Orders_OrderId\nON dbo.Orders (OrderId);",
+      "note": "Choose a narrow, stable and commonly used key. Randomly changing wide keys can cause page splits and extra storage overhead.",
+      "scenario": "An Orders table may use an increasing OrderId as its clustered key so new orders are appended efficiently."
+    },
+    {
+      "title": "3. Non-clustered indexes",
+      "body": "A non-clustered index is a separate structure containing indexed key values and a row locator. A table can have multiple non-clustered indexes, each supporting a different access pattern.",
+      "example": "CREATE NONCLUSTERED INDEX IX_Orders_Status_CreatedAt\nON dbo.Orders (Status, CreatedAt);",
+      "note": "The key order matters. This index is most useful when queries filter by Status and then search or sort by CreatedAt.",
+      "scenario": "A support queue that loads pending orders newest first can benefit from a composite non-clustered index."
+    },
+    {
+      "title": "4. Composite index key order",
+      "body": "A composite index contains multiple key columns. Put columns used in equality predicates first, followed by range, sorting or grouping columns when that matches the dominant query pattern.",
+      "example": "CREATE INDEX IX_Tickets_Tenant_Status_CreatedAt\nON dbo.Tickets (TenantId, Status, CreatedAt DESC);\n\nSELECT TicketId, CreatedAt, Priority\nFROM dbo.Tickets\nWHERE TenantId = @TenantId\n  AND Status = 'Open'\nORDER BY CreatedAt DESC;",
+      "note": "The same columns in a different order may support a different query. Do not assume one composite index serves every combination of filters.",
+      "scenario": "A multi-tenant support system can seek directly to open tickets for one tenant instead of scanning other tenants' data."
+    },
+    {
+      "title": "5. Included columns and covering indexes",
+      "body": "An included column is stored at the leaf level without becoming part of the index key. An index that contains all columns needed by a query is called a covering index and may avoid lookups to the base table.",
+      "example": "CREATE INDEX IX_Orders_CustomerId\nON dbo.Orders (CustomerId)\nINCLUDE (CreatedAt, Status, TotalAmount);",
+      "note": "Include only useful output columns. Very wide indexes increase storage, memory pressure and write cost.",
+      "scenario": "An order summary endpoint can return common display fields directly from the index instead of performing a lookup for every matching order."
+    },
+    {
+      "title": "6. Filtered indexes",
+      "body": "A filtered index covers only rows that meet a predicate. It is useful when an application repeatedly queries a small, stable subset of a much larger table.",
+      "example": "CREATE INDEX IX_Orders_Pending\nON dbo.Orders (CreatedAt)\nINCLUDE (CustomerId, TotalAmount)\nWHERE Status = 'Pending';",
+      "note": "The query predicate must be compatible with the filter, and the filtered condition should match a real workload rather than a temporary data distribution.",
+      "scenario": "A payment worker that repeatedly finds pending orders can use a smaller filtered index instead of indexing every completed historical order."
+    },
+    {
+      "title": "7. Index seeks versus scans",
+      "body": "An index seek navigates to a targeted part of an index. An index scan reads many or all index entries. A scan is not automatically bad, but scanning a large table for a selective lookup is usually a warning sign.",
+      "example": "SELECT OrderId, TotalAmount\nFROM dbo.Orders\nWHERE CustomerId = @CustomerId;\n\n-- Compare the plan with a broad query:\nSELECT OrderId, TotalAmount\nFROM dbo.Orders;",
+      "note": "Use the actual execution plan and logical reads to decide whether an operator is expensive for the data volume and request frequency.",
+      "scenario": "A query that was fast with 10,000 rows may need an index after the same table grows to 100 million rows."
+    },
+    {
+      "title": "8. SARGable predicates",
+      "body": "A SARGable predicate lets SQL Server use an index efficiently. Applying a function or calculation to the indexed column often prevents a direct seek. Rewrite the predicate when possible.",
+      "example": "-- Less seek-friendly\nWHERE YEAR(CreatedAt) = 2026;\n\n-- Range-based and seek-friendly\nWHERE CreatedAt >= '20260101'\n  AND CreatedAt < '20270101';",
+      "note": "Avoid wrapping indexed columns in functions, implicit conversions or expressions unless you have measured the plan and understand the tradeoff.",
+      "scenario": "A yearly report can use the CreatedAt index with a date range instead of calculating YEAR for every row."
+    },
+    {
+      "title": "9. Selectivity and cardinality",
+      "body": "Selectivity describes how narrowly a predicate identifies rows. A unique CustomerId is usually more selective than a Yes/No IsActive flag. SQL Server estimates row counts using statistics, and inaccurate estimates can lead to poor plans.",
+      "example": "SELECT COUNT(*) AS MatchingRows\nFROM dbo.Users\nWHERE Email = @Email;\n\nSELECT COUNT(*) AS MatchingRows\nFROM dbo.Users\nWHERE IsActive = 1;",
+      "note": "An index on a low-cardinality column may still help when combined with other keys or when the filtered subset is small.",
+      "scenario": "An IsActive index may not help a table where 99% of users are active, while a unique email lookup is highly selective."
+    },
+    {
+      "title": "10. Statistics and execution plans",
+      "body": "Statistics help the optimizer estimate how many rows a predicate will return. The actual execution plan shows what SQL Server really did, including seeks, scans, joins, lookups, sorts and warnings.",
+      "example": "UPDATE STATISTICS dbo.Orders WITH FULLSCAN;\n\n-- In SSMS, enable the Actual Execution Plan before running:\nSELECT OrderId, TotalAmount\nFROM dbo.Orders\nWHERE CustomerId = @CustomerId;",
+      "note": "Refresh statistics carefully and measure before and after. FULLSCAN can be expensive on large production tables.",
+      "scenario": "After a bulk import, stale statistics may cause SQL Server to choose a nested-loop plan that is poor for the new data volume."
+    },
+    {
+      "title": "11. Key lookups",
+      "body": "A key lookup occurs when SQL Server finds rows in a non-clustered index but must visit the clustered index or heap to fetch additional columns. A few lookups may be fine; thousands can be expensive.",
+      "example": "CREATE INDEX IX_Orders_CustomerId_Covering\nON dbo.Orders (CustomerId)\nINCLUDE (OrderId, CreatedAt, TotalAmount);",
+      "note": "A covering index can remove the lookup, but do not automatically include every selected column. Compare the read improvement with write and storage cost.",
+      "scenario": "An API returning 50,000 matching rows may spend more time performing lookups than reading the original filtered index."
+    },
+    {
+      "title": "12. Fragmentation and page splits",
+      "body": "Frequent inserts, updates and deletes can leave index pages fragmented. Random keys can cause page splits when SQL Server inserts into full pages. Fragmentation is a symptom to investigate, not a reason to rebuild every index blindly.",
+      "example": "SELECT OBJECT_NAME(ips.object_id) AS TableName,\n       i.name AS IndexName,\n       ips.avg_fragmentation_in_percent,\n       ips.page_count\nFROM sys.dm_db_index_physical_stats(DB_ID(), NULL, NULL, NULL, 'LIMITED') AS ips\nJOIN sys.indexes AS i\n  ON i.object_id = ips.object_id\n AND i.index_id = ips.index_id\nWHERE ips.page_count > 100;",
+      "note": "Maintenance decisions should consider fragmentation, page count, workload and maintenance windows. Reorganize and rebuild have different costs.",
+      "scenario": "A nightly maintenance job can target large, heavily fragmented indexes rather than blocking the entire database with unnecessary rebuilds."
+    },
+    {
+      "title": "13. Index maintenance choices",
+      "body": "REORGANIZE is generally an online, incremental operation. REBUILD recreates the index and can be more thorough but may consume more resources and require stronger locking depending on edition and options.",
+      "example": "ALTER INDEX IX_Orders_CustomerId ON dbo.Orders REORGANIZE;\n\nALTER INDEX IX_Orders_CustomerId ON dbo.Orders\nREBUILD WITH (ONLINE = ON);",
+      "note": "Test edition support, transaction log growth, blocking and available maintenance windows before using ONLINE or large rebuilds.",
+      "scenario": "A high-traffic e-commerce database may reorganize moderate fragmentation during the day and reserve rebuilds for a controlled maintenance window."
+    },
+    {
+      "title": "14. Indexes and write performance",
+      "body": "Every INSERT, UPDATE and DELETE may need to maintain affected indexes. Too many overlapping indexes slow writes, increase log volume and consume memory. Index design must balance read speed with write cost.",
+      "example": "SELECT OBJECT_NAME(i.object_id) AS TableName,\n       i.name AS IndexName,\n       ius.user_seeks, ius.user_scans, ius.user_updates\nFROM sys.dm_db_index_usage_stats AS ius\nJOIN sys.indexes AS i\n  ON i.object_id = ius.object_id\n AND i.index_id = ius.index_id\nWHERE ius.database_id = DB_ID();",
+      "note": "Usage statistics reset after restart or database events, so treat them as evidence over an observation period rather than absolute truth.",
+      "scenario": "A write-heavy order ingestion service may need fewer indexes than a read-heavy reporting database using the same tables."
+    },
+    {
+      "title": "15. Debugging a slow query",
+      "body": "Start with the actual query, parameter values, row counts and execution plan. Check logical reads, duration, waits, blocking, implicit conversions and whether the estimated and actual row counts differ significantly.",
+      "example": "SET STATISTICS IO, TIME ON;\n\nSELECT OrderId, TotalAmount\nFROM dbo.Orders\nWHERE CustomerId = @CustomerId;\n\nSET STATISTICS IO, TIME OFF;",
+      "note": "Do not add an index based only on a missing-index suggestion. Validate the workload, existing indexes, write cost and whether a query rewrite is better.",
+      "scenario": "When an endpoint slows after a release, compare the old and new plans and parameter values before changing production indexes."
+    },
+    {
+      "title": "16. A practical indexing workflow",
+      "body": "Index from measured workload patterns: capture the important queries, inspect plans, identify predicates and sort order, test a focused index, measure reads and writes, then monitor it after deployment.",
+      "example": "CREATE INDEX IX_OrderSearch_Tenant_Status_CreatedAt\nON dbo.Orders (TenantId, Status, CreatedAt DESC)\nINCLUDE (OrderId, CustomerId, TotalAmount);",
+      "note": "An index is successful when it improves a real workload without creating unacceptable write, storage or maintenance costs.",
+      "scenario": "For an enterprise search screen, test representative tenants and date ranges instead of benchmarking only a small development database."
+    }
+  ]
+}

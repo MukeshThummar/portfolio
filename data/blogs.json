@@ -26,7 +26,8 @@
     "readTime": "10 min read",
     "date": "Future idea",
     "tags": ["Indexing", "Performance", "SQL Server"],
-    "draft": true
+    "draft": true,
+    "guide": "data/sql-indexing-guide.json"
   },
   {
     "title": "What's New in .NET 8",
