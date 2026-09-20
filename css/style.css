@@ -341,15 +341,6 @@ pre { margin: 0; overflow: auto; color: #d7f7ff; font: 0.92rem/1.7 "JetBrains Mo
   cursor: pointer;
 }
 .filter-btn.active { color: white; background: var(--primary); border-color: var(--primary); }
-.project-art {
-  height: 116px;
-  border-radius: var(--radius);
-  margin: -4px 0 18px;
-  background:
-    linear-gradient(135deg, rgba(15,98,254,.26), rgba(24,199,211,.12)),
-    repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,255,255,.05) 18px 19px),
-    var(--surface-strong);
-}
 .project-meta, .blog-meta { display: flex; flex-wrap: wrap; gap: 8px; color: var(--accent); font: 0.8rem "JetBrains Mono", monospace; }
 .project-stack, .blog-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
 .blog-description {

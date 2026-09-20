@@ -34,7 +34,6 @@
   function card(project) {
     return `
       <article class="project-card reveal visible" data-category="${project.category}">
-        <div class="project-art" aria-hidden="true"></div>
         <div class="project-meta"><span>${project.category}</span><span>${project.status}</span></div>
         <h3>${project.name}</h3>
         <p>${project.description}</p>
