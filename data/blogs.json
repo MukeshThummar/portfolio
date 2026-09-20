@@ -11,7 +11,8 @@
     "readTime": "9 min read",
     "date": "Future idea",
     "tags": ["SQL Server", "T-SQL", "Database"],
-    "draft": true
+    "draft": true,
+    "guide": "data/sql-server-statements-guide.json"
   },
   {
     "title": "How Indexing Works in SQL",
