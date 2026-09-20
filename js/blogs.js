@@ -77,7 +77,9 @@
           }
         });
       });
+      dialogContent.scrollTop = 0;
       dialog.showModal();
+      requestAnimationFrame(() => { dialogContent.scrollTop = 0; });
     }
 
     document.addEventListener("click", (event) => {
