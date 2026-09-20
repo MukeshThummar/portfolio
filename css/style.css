@@ -392,6 +392,23 @@ pre { margin: 0; overflow: auto; color: var(--code-text); font: 0.92rem/1.7 "Jet
 .copy-query:hover { border-color: var(--accent); color: var(--accent); }
 .guide-section pre { margin: 8px 0 0; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--code-background); color: var(--code-text); white-space: pre-wrap; }
 .guide-section code { color: inherit; }
+.index-diagram { margin: 18px 0; padding: 18px; border: 1px solid var(--border); border-radius: var(--radius); background: color-mix(in srgb, var(--surface-strong) 78%, var(--primary)); overflow: hidden; }
+.diagram-caption { color: var(--text); font-weight: 700; }
+.diagram-footnote { margin-top: 14px; color: var(--muted); font: .78rem "JetBrains Mono", monospace; }
+.page-stack { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.data-page { display: grid; gap: 6px; padding: 10px; border: 1px solid color-mix(in srgb, var(--accent), var(--border)); border-radius: 6px; background: var(--surface); }
+.data-page b { color: var(--accent); font: .78rem "JetBrains Mono", monospace; }
+.data-page span { padding: 7px; border-radius: 4px; background: var(--surface-strong); color: var(--muted); font-size: .8rem; }
+.data-page small { color: var(--muted); font-size: .7rem; }
+.clustered-track { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+.clustered-track span, .tree-node { padding: 9px 11px; border: 1px solid color-mix(in srgb, var(--accent), var(--border)); border-radius: 5px; background: var(--surface); color: var(--text); font: .78rem "JetBrains Mono", monospace; }
+.clustered-track i { color: var(--accent); font-style: normal; }
+.btree { display: grid; justify-items: center; gap: 12px; margin-top: 18px; }
+.tree-branch, .tree-leaves { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.tree-node.root { background: var(--primary); color: #fff; }
+.tree-node.leaf { background: var(--surface); }
+.lookup-path { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+.lookup-path i { color: var(--accent); font: .78rem "JetBrains Mono", monospace; font-style: normal; }
 .query-reference { display: grid; gap: 10px; align-content: start; }
 .query-reference h4 { margin: 0 0 4px; color: var(--muted); font: .74rem "JetBrains Mono", monospace; text-transform: uppercase; }
 .query-reference pre { margin: 0; height: calc(100% - 18px); font-size: .78rem; }
@@ -408,6 +425,8 @@ pre { margin: 0; overflow: auto; color: var(--code-text); font: 0.92rem/1.7 "Jet
   .guide-content { padding: 4px 18px 22px; }
   .guide-section { padding: 20px 0; }
   .query-layout { grid-template-columns: 1fr; }
+  .page-stack { grid-template-columns: 1fr; }
+  .lookup-path { align-items: stretch; flex-direction: column; text-align: center; }
   .guide-section pre { padding: 12px; font-size: .75rem; }
 }
 
