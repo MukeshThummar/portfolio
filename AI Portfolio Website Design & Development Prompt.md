@@ -836,10 +836,6 @@ Create:
 /portfolio
 │
 ├── index.html
-├── about.html
-├── projects.html
-├── blogs.html
-├── contact.html
 │
 ├── css/
 │   ├── style.css
